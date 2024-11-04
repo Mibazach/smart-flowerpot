@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ flowerpot.name }} - Details{% endblock %}
+
+{% block content %}
+<h1>{{ flowerpot.name }} Details</h1>
+<p><strong>Location:</strong> {{ flowerpot.location }}</p>
+<p><strong>Description:</strong> {{ flowerpot.description }}</p>
+
+<h2>Environment Data</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Temperature</th>
+            <th>Moisture</th>
+            <th>pH Level</th>
+            <th>Light Level</th>
+            <th>Humidity</th>
+            <th>Recorded At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in flowerpot.environment_data.all %}
+        <tr>
+            <td>{{ data.temperature }}</td>
+            <td>{{ data.moisture }}</td>
+            <td>{{ data.ph_level }}</td>
+            <td>{{ data.light_level }}</td>
+            <td>{{ data.humidity }}</td>
+            <td>{{ data.created_at }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No environment data available for this flowerpot.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'flowerpot.list' %}">Back to Dashboard</a>
+{% endblock %}

@@ -6,6 +6,8 @@ __pycache__
 db.sqlite3
 media
 
+smart_flowerpot/static
+
 # Backup files # 
 *.bak 
 
@@ -122,6 +124,7 @@ Control.system-ca-bundle
 GitHub.sublime-settings 
 
 # Visual Studio Code # 
+.vscode
 .vscode/* 
 !.vscode/settings.json 
 !.vscode/tasks.json 
