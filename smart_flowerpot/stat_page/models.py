@@ -44,5 +44,5 @@ class EnvironmentData(BaseTimeMixin):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.flowerpot.name} - {self.log_name}"
+        return f"{self.flowerpot.name} - {self.hash}"
     
