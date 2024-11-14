@@ -51,7 +51,7 @@ chmod u+x run.sh
 ```bash
 cd /var/www/
 git clone https://github.com/Mibazach/smart-flowerpot.git
-cd smart_flowerpot
+cd smart-flowerpot/
 python3 -m pip install -r requirements.txt
 mkdir -p smart_flowerpot/static
 cd smart_flowerpot
