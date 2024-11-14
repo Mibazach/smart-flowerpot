@@ -58,6 +58,7 @@ cd smart_flowerpot
 python3 manage.py collectstatic
 python3 manage.py makemigrations
 python3 manage.py migrate
+python3 manage.py populate_db
 chmod u+x run.sh
 python3 manage.py createsuperuser
 ./run.sh
