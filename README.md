@@ -36,14 +36,29 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 ```
 
-4. Create super user
+5. Create super user
 ```bash
 python3 manage.py createsuperuser
 ```
 
-
 6. Run unvicorn script
 ```bash
 chmod u+x run.sh
+./run.sh
+```
+
+# All commands:
+```bash
+cd /var/www/
+git clone https://github.com/Mibazach/smart-flowerpot.git
+cd smart_flowerpot
+python3 -m pip install -r requirements.txt
+mkdir -p smart_flowerpot/static
+cd smart_flowerpot
+python3 manage.py collectstatic
+python3 manage.py makemigrations
+python3 manage.py migrate
+chmod u+x run.sh
+python3 manage.py createsuperuser
 ./run.sh
 ```

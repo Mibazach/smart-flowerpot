@@ -24,7 +24,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'smart_flowerpot.middlewares.DynamicAllowedHostsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
