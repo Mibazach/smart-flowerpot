@@ -13,6 +13,7 @@ Simple app for controling remote smart flower pots
 1. Create virtual enviroment
 
 ```bash
+cd smart_flowerpot
 python3 -m venv env
 ```
 
@@ -22,25 +23,26 @@ python3 -m venv env
 python3 -m pip install -r requirements.txt
 ```
 
-3. Set ENV varibles:
-
-```bash
-source ~/.bashrc
-```
-
 3. Collect static files
 ```bash
 mkdir -p smart_flowerpot/static
+cd smart_flowerpot
 python3 manage.py collectstatic
 ```
 
 4. Migrate data
 ```bash
-mkdir -p smart_flowerpot/static
-python3 manage.py collectstatic
+python3 manage.py makemigrations
+python3 manage.py migrate
 ```
 
-5. Run unvicorn script
+4. Create super user
+```bash
+python3 manage.py createsuperuser
+```
+
+
+6. Run unvicorn script
 ```bash
 chmod u+x run.sh
 ./run.sh

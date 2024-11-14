@@ -5,6 +5,21 @@
 {% block content %}
 <h1>Smart Flowerpot Dashboard</h1>
 
+<h1>Welcome to the Home Page</h1>
+{% if user.is_authenticated %}
+    <p>Hello, {{ user.username }}!</p>
+{% else %}
+    <p>You are not logged in.</p>
+{% endif %}
+<nav>
+    {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% endif %}
+</nav>
+
 <h2>Flowerpots</h2>
 <table>
     <thead>

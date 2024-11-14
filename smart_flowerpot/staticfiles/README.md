@@ -1,0 +1,1 @@
+Tu zanjduję się pliki statyczne

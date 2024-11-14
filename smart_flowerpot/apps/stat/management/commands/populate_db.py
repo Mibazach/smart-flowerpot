@@ -2,8 +2,7 @@ import random
 import hashlib
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from django.db import transaction
-from stat_page.models import Flowerpot, EnvironmentData
+from apps.stat.models import Flowerpot, EnvironmentData
 
 class Command(BaseCommand):
     help = "Populate the database with random flowerpots and environment data."
