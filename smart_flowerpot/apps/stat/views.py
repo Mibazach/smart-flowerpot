@@ -3,14 +3,14 @@ from django.views.generic import TemplateView, ListView, DetailView
 from .models import Flowerpot, EnvironmentData
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class DashboardView(LoginRequiredMixin, ListView):
+class DashboardView(ListView):
   ''' Main dashboard page displaying all connected flowerpots '''
 
   template_name = "dashboard.html"
   model = Flowerpot
   context_object_name = 'flowerpots'
 
-class FlowerpotView(LoginRequiredMixin, DetailView):
+class FlowerpotView(DetailView):
   ''' Detail page displaying the environment data for a specific flowerpot '''
 
   template_name = "flowerpot.html"
