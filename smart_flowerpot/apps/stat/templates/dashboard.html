@@ -4,10 +4,8 @@
 
 {% block content %}
 
-<h2>Welcome to the Home Page</h2>
-
 {% if user.is_authenticated %}
-<p style="text-align: center;">Hello, {{ user.username }} our mighty Gardener!</p>
+<h3 style="text-align: center;">Hello, {{ user.username }} our mighty Gardener! Welcome to the Home Page</h3>
 {% else %}
 <p style="text-align: center;">You are not logged in.</p>
 {% endif %}
@@ -19,7 +17,7 @@
         <button type="submit" class="logout-button">Logout</button>
     </form>
     {% endif %}
-  </nav>
+</nav>
 
 <div class="table-container">
     <table class="flowerpots">

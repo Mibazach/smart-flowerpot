@@ -11,6 +11,10 @@ main {
   flex: 1;
 }
 
+hr {
+  width: 100%;
+}
+
 footer {
   color: white;
   width: 100%;
@@ -52,6 +56,9 @@ table {
 
 .login-button{
   font-size: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid black;
 }
 
 .register {
@@ -67,10 +74,22 @@ table {
 
 .register-button{
   font-size: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid black;
 }
 
 .logout-button{
-  font-size: 15px;
+  font-size: 22px;
+  background-color: #DEDCB5;
+  border-radius: 10px;
+  border: 2px solid black;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .main-button{
@@ -91,8 +110,9 @@ h2 {
 }
 
 .card-fp-details{
-  padding-top: 10px;
+  padding-top: 20px;
 }
+
 .card-fp-details table{
   border-radius: 20px;
   border: 4px solid black;
@@ -101,9 +121,11 @@ h2 {
   margin-left: auto;
   margin-right: auto;
 }
+
 .card-fp-details th{
   font-size: 45px;
 }
+
 .card-fp-details td{
   text-align: center;
   font-size: 25px;
@@ -113,6 +135,7 @@ h2 {
   padding-top: 50px;
   padding-left: 40px;
   padding-right: 40px;
+  padding-bottom: 20px;
   display: grid;
   grid-template-columns: auto auto;
   column-gap: 70px;
