@@ -1,84 +1,72 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 
-{% block title %}{{ flowerpot.name }} - Details{% endblock %}
+{% block title %}{{ flowerpot.name }} - Details{% endblock %} 
 
 {% block content %}
+
 <div class="card-fp-details">
-    <table>
-        <thead>
-            <tr>
-              <th colspan="3">{{flowerpot.name}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-                <td style="font-weight: bold;">🌡️ Temperature:</td>
-                <td style="font-size: 45px;">22</td>
-                <td>STATUS</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;">💧 Moisture:</td>
-                <td style="font-size: 45px;">22</td>
-                <td>STATUS</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;">🧪 ph Level:</td>
-                <td style="font-size: 45px;">22</td>
-                <td>STATUS</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;">🌞 Light Level:</td>
-                <td style="font-size: 45px;">22</td>
-                <td>STATUS</td>
-            </tr>
-            <tr>
-                <td style="font-weight: bold;">💦 Humidity:</td>
-                <td style="font-size: 45px;">22</td>
-                <td>STATUS</td>
-            </tr>
-            <tr>
-                <td colspan="1">Location:</td>
-                <td colspan="2">Basement</td>
-            </tr>
-            <tr>
-                <td colspan="1">Description:</td>
-                <td colspan="2">Pelargonia</td>
-            </tr>
-          </tbody>
-          <caption style="caption-side: bottom; font-size: 20px; font-style: italic;">
-            Recorded at: Nov. 6, 2024, 9:38 a.m.
-          </caption>
-    </table>
-</div>
-<h2 style="text-align: center;">Environment Data</h2>
-<table style="align-self: center;">
+  <table>
     <thead>
-        <tr>
-            <th>Temperature</th>
-            <th>Moisture</th>
-            <th>pH Level</th>
-            <th>Light Level</th>
-            <th>Humidity</th>
-            <th>Recorded At</th>
-        </tr>
+      <tr>
+        <th colspan="3">{{flowerpot.name}}</th>
+      </tr>
     </thead>
     <tbody>
-        {% for data in flowerpot.environment_data.all %}
-        <tr>
-            <td>{{ data.temperature }}</td>
-            <td>{{ data.moisture }}</td>
-            <td>{{ data.ph_level }}</td>
-            <td>{{ data.light_level }}</td>
-            <td>{{ data.humidity }}</td>
-            <td>{{ data.created_at }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">No environment data available for this flowerpot.</td>
-        </tr>
-        {% endfor %}
+      <tr>
+        <td style="font-weight: bold">🌡️ Temperature:</td>
+        <td style="font-size: 35px">22</td>
+        <td>STATUS</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold">💧 Moisture:</td>
+        <td style="font-size: 35px">22</td>
+        <td>STATUS</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold">🧪 ph Level:</td>
+        <td style="font-size: 35px">22</td>
+        <td>STATUS</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold">🌞 Light Level:</td>
+        <td style="font-size: 35px">22</td>
+        <td>STATUS</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold">💦 Humidity:</td>
+        <td style="font-size: 35px">22</td>
+        <td>STATUS</td>
+      </tr>
+      <tr>
+        <td colspan="1">Location:</td>
+        <td colspan="2">Basement</td>
+      </tr>
+      <tr>
+        <td colspan="1">Description:</td>
+        <td colspan="2">Pelargonia</td>
+      </tr>
     </tbody>
-</table>
-
+    <caption style="caption-side: bottom; font-size: 20px; font-style: italic">
+      Recorded at: Nov. 6, 2024, 9:38 a.m.
+    </caption>
+  </table>
+</div>
+<div class="grid-container">
+    <div class="grid-item">
+        <canvas></canvas>
+    </div>
+    <div class="grid-item">
+        <canvas></canvas>
+    </div>
+    <div class="grid-item">
+        <canvas></canvas>
+    </div>  
+    <div class="grid-item">
+        <canvas></canvas>
+    </div>
+    <div class="grid-item">
+        <canvas></canvas>
+    </div>
+</div>
 <a href="{% url 'flowerpot.list' %}">Back to Dashboard</a>
 {% endblock %}
