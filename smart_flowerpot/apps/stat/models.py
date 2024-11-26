@@ -40,7 +40,7 @@ class EnvironmentData(BaseTimeMixin):
 
     def save(self, *args, **kwargs):
         hash_source = f"{self.flowerpot.name}{self.temperature}{self.moisture}{self.ph_level}{self.light_level}{self.humidity}{self.created_at}"
-        self.log_name = hashlib.md5(hash_source.encode('utf-8')).hexdigest()
+        self.hash = hashlib.md5(hash_source.encode('utf-8')).hexdigest()
         super().save(*args, **kwargs)
 
     def __str__(self):
