@@ -6,7 +6,11 @@ __pycache__
 db.sqlite3
 media
 
+stat_page/
 smart_flowerpot/static
+
+# Node modules
+node_modules/
 
 # Backup files # 
 *.bak 
