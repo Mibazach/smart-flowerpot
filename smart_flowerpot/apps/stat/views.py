@@ -29,7 +29,7 @@ class FlowerpotCreatorView(LoginRequiredMixin, CreateView):
   model = Flowerpot
   fields = ['name', 'description', 'location']
 
-  success_url = reverse_lazy('dashboard')
+  success_url = reverse_lazy('home')
 
   def form_valid(self, form):
       return super().form_valid(form)

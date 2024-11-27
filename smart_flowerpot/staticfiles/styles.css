@@ -59,6 +59,12 @@ table {
   background-color: white;
   border-radius: 10px;
   border: 2px solid black;
+  cursor: pointer;
+}
+
+.login-button:hover{
+  background-image: linear-gradient(#7FC346, #118411);
+  color: white
 }
 
 .register {
@@ -77,13 +83,27 @@ table {
   background-color: white;
   border-radius: 10px;
   border: 2px solid black;
+  cursor: pointer;
+}
+
+.register-button:hover{
+  background-image: linear-gradient(#7FC346, #118411);
+  color: white
 }
 
 .logout-button{
+  font-family: inherit;
+  width: 120px;
   font-size: 22px;
   background-color: #DEDCB5;
   border-radius: 10px;
   border: 2px solid black;
+  cursor: pointer;
+}
+
+.logout-button:hover{
+  background-image: linear-gradient(#7FC346, #118411);
+  color: white
 }
 
 nav {
@@ -165,7 +185,7 @@ h2 {
 }
 
 .caption {
-  
+
   caption-side: bottom;
   font-size: 23px;
   font-style: italic;
@@ -176,7 +196,7 @@ h2 {
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
-  background-image: linear-gradient(#DEDCB5, #6da02b);
+  background-image: linear-gradient(#DEDCB5, #b4d786);
   border: 3px solid black;
   border-radius: 5px;
   width: 20%;
@@ -218,4 +238,53 @@ h2 {
 .threshold-div form button:hover {
   background-image: linear-gradient(#53762d, #080c08);
   color: white;
+}
+
+.add-flowerpot {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  display: flex;             
+  justify-content: center;    
+  align-items: center;        
+}
+
+.add-flowerpot button {
+  height: 50px;
+  width: 400px;
+  font-size: 25px;
+  font-weight: bold;
+  font-style: italic;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 2.5px solid black;
+  background-image: linear-gradient(#599527, #118411);
+}
+
+.add-flowerpot button:hover {
+  background-image: linear-gradient(#53762d, #080c08);
+  color: white;
+}
+
+.add-panel{
+  background-color: #DEDCB5;
+  border: 2px solid #000;
+  border-radius: 20px; 
+  padding: 10px; 
+  color:#000;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+.add-button{
+  font-size: 20px;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.add-button:hover{
+  background-image: linear-gradient(#7FC346, #118411);
+  color: white
 }
