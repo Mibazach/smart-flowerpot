@@ -6,11 +6,13 @@
 
 <div class="login">
     <h2>Login</h2>
-    <form method="post">
+    <form style="padding-bottom: 15px;" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="login-button">🌺 Log In 🌺</button>
     </form>
+    <h3 style="font-style: italic;">Don't have an account? Register bellow!</h3>
+    <button class="register-button" onclick="location.href = '/register'">🪻 Register 🪻</button>
 </div>
 
 {% endblock %}
