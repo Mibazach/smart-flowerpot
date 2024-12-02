@@ -1,4 +1,5 @@
 import hashlib
+from django.utils import timezone
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from paho.mqtt.client import Client as MQTTClient
@@ -13,7 +14,7 @@ class Command(BaseCommand):
         mqtt_topic = 'test'
 
         mqtt_client = MQTTClient(client_id="django_mqtt_listener")
-        
+
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
                 self.stdout.write(self.style.SUCCESS('Connected to MQTT broker'))
@@ -23,32 +24,27 @@ class Command(BaseCommand):
         def on_message(client, userdata, message):
             try:
                 payload = message.payload.decode('utf-8').split("|")
-                if len(payload) < 6:
+                if len(payload) < 4:
                     self.stderr.write(self.style.ERROR(f"Incomplete payload: {payload}"))
                     return
-                
+
                 flowerpot_slug = payload[0]
                 temperature = Decimal(payload[1])
                 soil_moisture = Decimal(payload[2])
                 air_humidity = Decimal(payload[3])
-                created_at = payload[4]
-                
+                created_at = timezone.now()
                 try:
                     flowerpot = Flowerpot.objects.get(slug=flowerpot_slug)
                 except Flowerpot.DoesNotExist:
                     self.stderr.write(self.style.ERROR(f"Flowerpot with slug '{flowerpot_slug}' does not exist"))
                     return
 
-                hash = self.generate_hash(
-                    flowerpot.slug, temperature, soil_moisture, air_humidity, created_at
-                )
+
                 env_data = EnvironmentData(
                     flowerpot=flowerpot,
                     temperature=temperature,
                     soil_moisture=soil_moisture,
-                    air_humidity=air_humidity,
-                    hash=hash,
-                    created_at=created_at
+                    air_humidity=air_humidity
                 )
                 env_data.save()
                 self.stdout.write(self.style.SUCCESS(
@@ -73,4 +69,3 @@ class Command(BaseCommand):
 
 if __name__ == '__main__':
     Command().handle(None, None)
-

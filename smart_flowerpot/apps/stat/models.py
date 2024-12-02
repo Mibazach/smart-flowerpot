@@ -1,10 +1,11 @@
 from django.db import models
 import hashlib
+from django.utils import timezone
 
 
 class BaseTimeMixin(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, help_text="Date and time when the flowerpot entry was created")
-    updated_at = models.DateTimeField(auto_now=True, help_text="Date and time when the flowerpot entry was last updated")
+    created_at = models.DateTimeField(auto_now_add=True, null=None, blank=None, help_text="Date and time when the flowerpot entry was created")
+    updated_at = models.DateTimeField(auto_now=True, null=None, blank=None, help_text="Date and time when the flowerpot entry was last updated")
 
     class Meta:
         abstract = True
@@ -15,6 +16,11 @@ class Flowerpot(BaseTimeMixin):
     slug = models.SlugField(max_length=100, unique=True, help_text="Unique slug for the smart flowerpot")
     description = models.TextField(blank=True, null=True, help_text="Description or notes about the flowerpot")
     location = models.CharField(max_length=100, blank=True, null=True, help_text="Location of the flowerpot (e.g., 'Living Room')")
+
+    threshold = models.PositiveIntegerField(
+        blank=True, null=True, 
+        default=30, help_text="Soil moisture threshold percentage"
+    )
 
     class Meta:
         ordering = ['-created_at']
@@ -57,6 +63,8 @@ class EnvironmentData(BaseTimeMixin):
         verbose_name_plural = "Environment Data"
 
     def save(self, *args, **kwargs):
+        if not self.created_at:
+            self.created_at = timezone.now()
         hash_source = f"{self.flowerpot.slug}{self.temperature}{self.soil_moisture}{self.air_humidity}{self.temperature}{self.created_at}"
         self.hash = hashlib.md5(hash_source.encode('utf-8')).hexdigest()
         super().save(*args, **kwargs)
