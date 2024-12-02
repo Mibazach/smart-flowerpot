@@ -1,7 +1,8 @@
 from django.db import models
 import hashlib
 from django.utils import timezone
-
+from django.utils.text import slugify
+import uuid
 
 class BaseTimeMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=None, blank=None, help_text="Date and time when the flowerpot entry was created")
@@ -24,6 +25,11 @@ class Flowerpot(BaseTimeMixin):
 
     class Meta:
         ordering = ['-created_at']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name) if self.name else str(uuid.uuid4())[:8]
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

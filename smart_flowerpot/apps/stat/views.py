@@ -1,8 +1,12 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponse
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView
 from .models import Flowerpot, EnvironmentData
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+import json
 
 class DashboardView(LoginRequiredMixin, ListView):
   ''' Main dashboard page displaying all connected flowerpots '''
@@ -33,3 +37,27 @@ class FlowerpotCreatorView(LoginRequiredMixin, CreateView):
 
   def form_valid(self, form):
       return super().form_valid(form)
+  
+
+
+@csrf_exempt
+@require_http_methods(["PATCH"])
+def set_threshold(request, id):
+    try:
+        flowerpot = get_object_or_404(Flowerpot, id=id)
+
+        data = json.loads(request.body)
+        threshold = data.get("threshold")
+
+        if threshold is None or not isinstance(threshold, int) or not (0 <= threshold <= 100):
+            return JsonResponse({"error": "Threshold must be an integer between 0 and 100"}, status=400)
+
+        flowerpot.threshold = threshold
+        flowerpot.save()
+
+        return JsonResponse({"message": "Threshold updated successfully", "threshold": flowerpot.threshold}, status=200)
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
