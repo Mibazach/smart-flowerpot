@@ -1,6 +1,7 @@
 import random
 import hashlib
 from django.core.management.base import BaseCommand
+from django.utils.text import slugify
 from django.utils import timezone
 from apps.stat.models import Flowerpot, EnvironmentData
 
@@ -28,7 +29,8 @@ class Command(BaseCommand):
             Flowerpot(
                 name=f"Flowerpot {i + 1}",
                 description=f"Description for Flowerpot {i + 1}",
-                location=random.choice(["Living Room", "Garden", "Office", "Balcony"])
+                location=random.choice(["Living Room", "Garden", "Office", "Balcony"]),
+                slug=slugify(f"Flowerpot {i + 1}")
             )
             for i in range(num)
         ]
@@ -53,29 +55,25 @@ class Command(BaseCommand):
     def generate_environment_data(self, flowerpot):
         """Generate a single environment data entry with random values and a unique hash."""
         temperature = round(random.uniform(10, 35), 2)
-        moisture = round(random.uniform(20, 80), 2)
-        ph_level = round(random.uniform(5, 8), 2)
-        light_level = round(random.uniform(100, 1000), 2)
-        humidity = round(random.uniform(30, 90), 2)
+        soil_moisture = round(random.uniform(20, 80), 2)
+        air_humidity = round(random.uniform(30, 90), 2)
         created_at = timezone.now()
 
         log_name = self.generate_hash(
-            flowerpot.name, temperature, moisture, ph_level, light_level, humidity, created_at
+            flowerpot.name, temperature, soil_moisture, air_humidity, created_at
         )
 
         return EnvironmentData(
             flowerpot=flowerpot,
             temperature=temperature,
-            moisture=moisture,
-            ph_level=ph_level,
-            light_level=light_level,
-            humidity=humidity,
+            soil_moisture=soil_moisture,
+            air_humidity=air_humidity,
             hash=log_name,
             created_at=created_at
         )
 
     @staticmethod
-    def generate_hash(name, temperature, moisture, ph_level, light_level, humidity, created_at):
+    def generate_hash(name, temperature, soil_moisture, air_humidity, created_at):
         """Generate a unique hash based on flowerpot name and environmental data."""
-        hash_source = f"{name}{temperature}{moisture}{ph_level}{light_level}{humidity}{created_at}"
+        hash_source = f"{name}{temperature}{soil_moisture}{air_humidity}{created_at}"
         return hashlib.md5(hash_source.encode('utf-8')).hexdigest()
