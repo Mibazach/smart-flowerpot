@@ -10,10 +10,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         mqtt_broker = '52.225.128.180'
-        mqtt_port = 1883
+        mqtt_port = 8883
         mqtt_topic = 'test'
 
         mqtt_client = MQTTClient(client_id="django_mqtt_listener")
+        mqtt_client.tls_set(ca_certs='/etc/mosquitto/certs/ca.crt',
+                            certfile='/home/iot/certs/test_kamil.crt',
+                            keyfile='/home/iot/certs/test_kamil.key',
+                            tls_version=2)
+        mqtt_client.username_pw_set(username="brysia", password="brysia")
 
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
