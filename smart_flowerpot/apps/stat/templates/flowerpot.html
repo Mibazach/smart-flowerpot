@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 
-{% block title %}{{ flowerpot.name }} - Details{% endblock %} 
+{% block title %}{{ flowerpot.name }} - Details{%endblock %} 
 
 {% block content %}
 
@@ -8,32 +8,42 @@
   <table>
     <thead>
       <tr>
-        <th style="padding-bottom: 20px;" colspan="3">{{flowerpot.name}}</th>
+        <th style="padding-bottom: 20px" colspan="3">{{ flowerpot.name }}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td style="font-weight: bold">🌡️ Temperature:</td>
-        <td class="info-card-env-data">{{ flowerpot.environment_data.first.temperature }}</td>
-        <td>STATUS</td>
+        <td style="font-weight: bold; width: 45%">🌡️ Temperature:</td>
+        <td class="info-card-env-data" id="temperature">
+          {{ flowerpot.environment_data.last.temperature|default:20 }}
+        </td>
+        <td class="status" id="temperature-status">STATUS</td>
       </tr>
       <tr>
         <td style="font-weight: bold">💧 Moisture:</td>
-        <td class="info-card-env-data">{{ flowerpot.environment_data.first.moisture }}</td>
-        <td>STATUS</td>
+        <td class="info-card-env-data" id="moisture">
+          {{ flowerpot.environment_data.last.soil_moisture|default:20 }}
+        </td>
+        <td class="status" id="moisture-status">STATUS</td>
       </tr>
       <tr>
         <td style="font-weight: bold">💦 Humidity:</td>
-        <td class="info-card-env-data">{{ flowerpot.environment_data.first.humidity }}</td>
-        <td>STATUS</td>
+        <td class="info-card-env-data" id="humidity">
+          {{ flowerpot.environment_data.last.air_humidity|default:20 }}
+        </td>
+        <td class="status" id="humidity-status">STATUS</td>
       </tr>
       <tr>
         <td colspan="1">Location:</td>
-        <td class="info-card-desc-loc" colspan="2">{{ flowerpot.location }}</td>
+        <td class="info-card-desc-loc" colspan="2">
+          {{ flowerpot.location|default:0 }}
+        </td>
       </tr>
       <tr class="info-card-desc-loc">
         <td colspan="1">Description:</td>
-        <td class="info-card-desc-loc" colspan="2">{{ flowerpot.description }}</td>
+        <td class="info-card-desc-loc" colspan="2">
+          {{ flowerpot.description|default:0 }}
+        </td>
       </tr>
     </tbody>
     <caption class="caption">
@@ -43,33 +53,233 @@
 </div>
 
 <div class="threshold-div">
-  <form method="post">
-    {% csrf_token %}
-    <label>Change threshold:</label>
-    <input required type="number" min="1" max="100">
-    <button>Change!</button>
-  </form>
+  <label>Change threshold (in %):</label>
+  <input
+    required
+    type="number"
+    min="1"
+    max="100"
+    id="threshold"
+    name="threshold"
+  />
+  <button id="setThresholdButton">Change!</button>
+  <p>Current threshold for moisture: {{ flowerpot.threshold }}%</p>
+  <div id="responseMessage" style="text-align: center; color: red"></div>
 </div>
 
 <div class="grid-container">
-    <div class="grid-item">
-        <canvas></canvas>
-    </div>
-    <div class="grid-item">
-        <canvas></canvas>
-    </div>
-    <div class="grid-item">
-        <canvas></canvas>
-    </div>  
-    <div class="grid-item">
-        <canvas></canvas>
-    </div>
-    <div class="grid-item">
-        <canvas></canvas>
-    </div>
+  <div class="grid-item">
+    <canvas id="temperatureChart"></canvas>
+  </div>
+  <div class="grid-item">
+    <canvas id="moistureChart"></canvas>
+  </div>
+  <div class="grid-item">
+    <canvas id="humidityChart"></canvas>
+  </div>
 </div>
 
-<script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', () => {
+      var a = "{{ flowerpot.threshold }}"
+      const thresholds = {
+        temperature: { good: 30, warning: 10 },
+        moisture: { good: 50, warning: a },
+        humidity: { good: 70, warning: 50 }
+      };
 
+      const determineStatus = (value, { good, warning }) => {
+        if (value >= good) return '🟢';
+        if (value >= warning) return '🟡';
+        return '🔴';
+      };
+
+      const updateStatus = (id, value, thresholds) => {
+        const statusElement = document.getElementById(`${id}-status`);
+        const status = determineStatus(value, thresholds);
+        statusElement.textContent = status;
+      };
+
+      const temperature = parseFloat(document.getElementById('temperature').textContent);
+      updateStatus('temperature', temperature, thresholds.temperature);
+
+      const moisture = parseFloat(document.getElementById('moisture').textContent);
+      updateStatus('moisture', moisture, thresholds.moisture);
+
+      const humidity = parseFloat(document.getElementById('humidity').textContent);
+      updateStatus('humidity', humidity, thresholds.humidity);
+    });
+
+
+  document.getElementById('setThresholdButton').addEventListener('click', () => {
+    console.log("help me :");
+    const thresholdValue = document.getElementById('threshold').value;
+    console.log(thresholdValue);
+    const flowerpotId = "{{ flowerpot.id }}";
+    console.log(flowerpotId);
+    const url = `/flowerpot/${flowerpotId}/set-threshold/`;
+    console.log(url);
+
+    if (!thresholdValue || isNaN(thresholdValue) || thresholdValue < 0 || thresholdValue > 100) {
+                  document.getElementById("responseMessage").innerText = "Please enter a valid threshold (0-100).";
+                  return;
+              }
+
+    fetch(url, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ threshold: parseInt(thresholdValue, 10) }),
+      })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error(`Error: ${response.status}`);
+              }
+              return response.json();
+          })
+          .then(data => {
+              location.reload();
+          })
+          .catch(error => {
+              document.getElementById("responseMessage").innerText = `Failed to update threshold: ${error.message}`;
+          });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const temperatureData = [
+        {% for data in flowerpot.environment_data.all %}
+            {{ data.temperature }},
+        {% empty %}
+            0,
+        {% endfor %}
+    ].slice(0, 20);  // Limit the data to the first 20 values
+
+    const moistureData = [
+        {% for data in flowerpot.environment_data.all %}
+            {{ data.soil_moisture }},
+        {% empty %}
+            0,
+        {% endfor %}
+    ].slice(0, 20);  // Limit the data to the first 20 values
+
+    const humidityData = [
+        {% for data in flowerpot.environment_data.all %}
+            {{ data.air_humidity }},
+        {% empty %}
+            0,
+        {% endfor %}
+    ].slice(0, 20);  // Limit the data to the first 20 values
+
+    const labels = [
+        {% for data in flowerpot.environment_data.all %}
+            "{{ data.created_at|date:'H:i:s' }}",
+        {% endfor %}
+    ].slice(0, 20);  // Limit the labels to the first 20 occurrences
+
+    // Create the Temperature Chart
+    const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+    const temperatureChart = new Chart(temperatureCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Temperature (°C)',
+                data: temperatureData,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    },
+                    ticks: {
+                        autoSkip: true,  // Automatically skip ticks if they are too dense
+                        maxRotation: 90, // Rotate labels for better readability
+                        minRotation: 45  // Optional: angle of the labels
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Create the Moisture Chart
+    const moistureCtx = document.getElementById('moistureChart').getContext('2d');
+    const moistureChart = new Chart(moistureCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Moisture (%)',
+                data: moistureData,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Soil Moisture (%)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Create the Humidity Chart
+    const humidityCtx = document.getElementById('humidityChart').getContext('2d');
+    const humidityChart = new Chart(humidityCtx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Humidity (%)',
+                data: humidityData,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                fill: false,
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Air Humidity (%)'
+                    }
+                }
+            }
+        }
+    });
+});
 </script>
 {% endblock %}

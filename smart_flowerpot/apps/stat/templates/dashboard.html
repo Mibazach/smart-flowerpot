@@ -34,24 +34,29 @@
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Details</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             {% for flowerpot in flowerpots %}
             <tr>
-                <td colspan="5" class="row-wrapper">
+                <td colspan="6" class="row-wrapper">
                     <div class="flowersummary">
                         <span>{{ flowerpot.name }}</span>
                         <span>{{ flowerpot.location }}</span>
                         <span>{{ flowerpot.created_at }}</span>
                         <span>{{ flowerpot.updated_at }}</span>
                         <a href="{% url 'flowerpot.detail' flowerpot.pk %}">View Details</a>
+                        <form action="{% url 'delete-flowerpot' flowerpot.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-button">Delete</button>
+                        </form>
                     </div>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5">No flowerpots available.</td>
+                <td colspan="6" style="text-align: center;">No flowerpots available.</td>
             </tr>
             {% endfor %}
         </tbody>

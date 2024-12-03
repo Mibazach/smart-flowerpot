@@ -4,6 +4,7 @@ from .views import (
     FlowerpotView,
     FlowerpotCreatorView,
     set_threshold,
+    delete_flowerpot,
 )
 
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path('flowerpot/<int:pk>/', FlowerpotView.as_view(), name='flowerpot.detail'),
     path('flowerpot-creator', FlowerpotCreatorView.as_view(), name='flowerpot-creator'),
     path('flowerpot/<int:id>/set-threshold/', set_threshold, name='set-threshold'),
+    path('flowerpot/<int:id>/delete/', delete_flowerpot, name='delete-flowerpot')
 ]

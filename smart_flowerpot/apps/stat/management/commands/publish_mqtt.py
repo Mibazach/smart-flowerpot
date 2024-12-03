@@ -28,19 +28,14 @@ class Command(BaseCommand):
 
         mqtt_client = MQTTClient.Client(client_id="django_mqtt_publisher")
         mqtt_client.username_pw_set(username="brysia", password="brysia")
-        #mqtt_client.tls_set(ca_certs='/etc/mosquitto/certs/ca.crt',
-         #                   certfile='/home/iot/certs/publisher.crt',
-          #                  keyfile='/home/iot/certs/publisher.key',
-           #                 tls_version=2)
 
         def on_connect(client, userdata, flags, rc):
             if rc == 0:
+                print("Connect dziala")
                 self.stdout.write(self.style.SUCCESS('Connected to MQTT broker'))
             else:
+                print("Connect niedzlaa")
                 self.stderr.write(self.style.ERROR(f'Failed to connect. Return code {rc}'))
-        #def on_publish(client, userdata, mid):
-         #   self.stdout.write(self.style.SUCCESS(f"Message published with ID {mid}"))
-
 
         mqtt_client.on_connect = on_connect
         mqtt_client.connect(mqtt_broker, mqtt_port)

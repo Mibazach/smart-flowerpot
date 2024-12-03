@@ -1,14 +1,17 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 
-{% block title %}Creator{% endblock %}
+{% block title %}Creator{% endblock %} 
 
 {% block content %}
 
 <div class="add-panel">
   <h2>Create a New Flowerpot</h2>
-  <form style="padding-bottom: 15px;" method="post">
+  <form style="padding-bottom: 15px" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <p>{{ form.slug.label_tag }} {{ form.slug }}</p>
+    <p>{{ form.name.label_tag }} {{ form.name }}</p>
+    <p>{{ form.description.label_tag }} {{ form.description }}</p>
+    <p>{{ form.location.label_tag}} {{ form.location }}</p>
     <button type="submit" class="add-button">🆕 Add flowerpot 🆕</button>
   </form>
 </div>
